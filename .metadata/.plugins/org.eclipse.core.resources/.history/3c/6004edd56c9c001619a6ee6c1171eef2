@@ -1,0 +1,169 @@
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
+class Lokke{
+	public void les(HashMap<String, Person> personer)throws Exception{
+		File startfile = new File("dvdarkiv.txt");
+		Scanner fil = new Scanner(startfile);
+		String prev = fil.nextLine(), tekst, tekst2;
+
+		while(prev.equals("-") == false){
+			nyPerson(personer, prev);
+			prev=fil.nextLine();
+		}
+
+		for(int i = 0; i<personer.size() ;i++){
+			prev = fil.nextLine();
+
+			while(!prev.equals("-") && fil.hasNextLine()){
+				tekst = fil.nextLine();
+
+				if(tekst.equals("-")) prev = tekst;
+
+				else{
+					if(tekst.charAt(0)!='*')kjop(personer.get(prev), tekst);
+
+					else{
+						tekst2 = fil.nextLine();
+						kjop(personer.get(prev), tekst.substring(1));
+						laan(personer.get(tekst2), personer.get(prev), tekst.substring(1));
+					}
+
+				}
+
+			}
+		}
+		fil.close();
+	}
+	public void lokke(HashMap<String, Person> personer){
+		Scanner sc = new Scanner(System.in);
+		String prev= "OBLIG", tekst, tekst2;
+		while(!prev.equals("7")){
+			System.out.println("Input skal vere ett tall.\n1: Opprett ny person.");
+			System.out.println("2: Kjop DVD.");
+			System.out.println("3: Laan DVD.");
+			System.out.println("4: Print oversikt over en bestemt.");
+			System.out.println("5: Print oversikt over alle i databasen.");
+			System.out.println("6: Returner en DVD.");
+			System.out.println("7: Avslutt.");
+			prev = sc.nextLine();
+
+			if(prev.equals("1")){ 
+				System.out.print("Navn paa person:");
+				tekst=sc.nextLine();
+
+				if(!personer.containsKey(tekst))nyPerson(personer, tekst);
+				System.out.println("");
+			}
+
+			else if(prev.equals("2")) {
+				System.out.println("Hvem kjopte DVD? ");
+				tekst = sc.nextLine();
+
+				if(personer.containsKey(tekst)){
+					System.out.println("Tittel paa DVD? ");
+					kjop(personer.get(tekst), sc.nextLine());
+				}
+				System.out.println("");
+			}
+
+			else if(prev.equals("3")){
+				System.out.println("Hvem vil laane?");
+				tekst = sc.nextLine();
+
+				if(personer.containsKey(tekst)){
+					System.out.println("Fra hvem?");
+					tekst2 = sc.nextLine();
+					if(personer.containsKey(tekst2)){
+						System.out.println("tittel?");
+						laan(personer.get(tekst), personer.get(tekst2), sc.nextLine());
+					}
+				}
+				System.out.println("");
+			}
+
+			else if(prev.equals("4")){
+				System.out.println("Navn paa person?");
+				tekst = sc.nextLine();
+
+				if(personer.containsKey(tekst)) visPerson(personer.get(tekst));		
+			}
+
+			else if(prev.equals("5")){
+
+				personer.forEach((String s,Person q)->
+				System.out.println(s + ":\nEier: " + q.tell()[0] + " \nLaaner ut: " + q.tell()[1] + "\nLaaner fra andre: " + q.tell()[2] + "\n")
+
+						); 
+				System.out.println("");
+			}
+
+			else if(prev.equals("6")){
+				System.out.println("Hvem har laant DVD-en?");
+				tekst = sc.nextLine();
+
+				if(personer.containsKey(tekst)){
+					System.out.println("Tittel paa DVD?");
+					retur(personer.get(tekst), sc.nextLine());
+				}
+				System.out.println("");
+			}
+
+
+		}
+		sc.close();
+	}
+	
+	// Frivillig del:::
+	void skriv(HashMap<String, Person> personer){
+		File gammel = new File("dvdarkiv.txt");
+		File ny = new File("_dvdarkiv.txt");
+		try{		
+			BufferedWriter bw = new BufferedWriter(new FileWriter("_dvdarkiv.txt"));
+		
+			for(Person per : personer.values()){
+				bw.write(per.toString()+"\n");
+			
+			}
+			for(Person paal : personer.values()){
+				bw.write(paal.toString()+"\n");
+				bw.write(paal.slutt());
+			
+			}
+			bw.close();
+		
+		} catch (IOException e){}
+
+	/*	gammel.delete();
+		ny.renameTo(gammel);
+	*/
+	}	
+	 void nyPerson(Map<String, Person> personer, String s){
+		if(!personer.containsKey(s)) personer.put(s, new Person(s));
+	}
+	 void kjop(Person s, String d){
+		s.add(s,d);
+	}
+	 void laan(Person til, Person fra, String tittel){
+		if (fra.has(tittel) && fra.inne(tittel)){
+			til.laan(fra.finn(tittel), fra);
+			fra.laanut(tittel, til);
+		}
+		else ;
+
+	}
+	 void visPerson(Person p){
+		p.printdvd();
+
+	}
+	 void retur( Person f, String t){
+		if(f.finn(t) != null){
+			f.tilbake(t);
+		}
+	}
+}

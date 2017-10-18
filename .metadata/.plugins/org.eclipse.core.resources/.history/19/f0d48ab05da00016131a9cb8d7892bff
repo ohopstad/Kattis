@@ -1,0 +1,12 @@
+class PersonTest3{
+	public static void main(String[]args){
+		//en person laaner en dvd, ser saa om det ble registrert
+		
+		
+		Person p = new Person("Olav");
+		p.add(p, "The game");
+		Person u = new Person("Valo");
+		u.laan(p.finn("The game"), p);
+		u.printdvd();
+	}	
+}	

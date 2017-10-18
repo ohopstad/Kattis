@@ -1,0 +1,6 @@
+import java.util.HashMap;
+class ObligAlt{
+	Start go = new Start();
+	HashMap<String, Person> personer = new HashMap<String, Person>();
+	go.@les(personer);
+}

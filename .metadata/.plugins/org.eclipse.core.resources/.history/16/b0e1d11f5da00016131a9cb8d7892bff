@@ -1,0 +1,11 @@
+class PersonTest2{
+	public static void main(String[]args){
+	// printer det som skal staa om denne personen i databasen til slutt.
+		
+		
+		Person p = new Person("Olav");
+		p.add(p, "The game");
+		System.out.println(p.slutt());
+		
+	}
+}

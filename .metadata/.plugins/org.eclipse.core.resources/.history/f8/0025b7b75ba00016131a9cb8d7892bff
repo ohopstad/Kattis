@@ -1,0 +1,15 @@
+class PersonTest{
+	public static void main(String[] args){
+		Person p = new Person("Olav");
+		System.out.println(p.toString());
+		p.add(p,"The Game");
+		p.add(p, "The Game");
+		Person u = new Person("Valo");
+		u.laan(p.finn("The Game"), p);
+		boolean bo = u.inne("The Game");
+		boolean b = p.inne("The Game");
+		if (bo) System.out.println(u.toString());
+		if(b)System.out.println(p.toString());
+		
+	}
+}

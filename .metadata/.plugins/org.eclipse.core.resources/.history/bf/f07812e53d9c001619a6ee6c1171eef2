@@ -1,0 +1,6 @@
+import java.util.HashMap;
+class Oblig7{
+	Start start = new Start();
+	HashMap<String, Person> personer = new HashMap<String, Person>();
+	start.les(personer);
+}

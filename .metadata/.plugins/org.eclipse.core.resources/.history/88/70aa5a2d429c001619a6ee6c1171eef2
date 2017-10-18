@@ -1,0 +1,8 @@
+import java.util.HashMap;
+class ObligAlt{
+	Start start = new Start();
+	HashMap<String, Person> personer = new HashMap<String, Person>();
+	
+	start.les(personer);
+	start.lokke(personer);
+	start.skriv(personer);

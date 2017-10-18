@@ -1,0 +1,9 @@
+class PersonTest1{
+	public static void main(String[] args){
+		Person p = new Person("Olav");
+		p.add(p, "The game");
+		p.printdvd();
+		
+		
+	}
+}

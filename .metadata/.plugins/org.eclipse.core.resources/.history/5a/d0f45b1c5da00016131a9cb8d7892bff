@@ -1,0 +1,8 @@
+class PersonTest2{
+	public static void main(String[]args){
+		Person p = new Person("Olav");
+		p.add(p, "The game");
+		System.out.println(p.slutt());
+		
+	}
+}

@@ -1,0 +1,82 @@
+import java.util.HashMap;
+import java.util.Map;
+
+class Person{
+	private String navn;
+	private Map<String, DVD>  arkiv = new HashMap<String, DVD>();
+	private Map<DVD, Person>  laante =new HashMap<DVD, Person>();
+	private Map<DVD, Person>  utlaante =new HashMap<DVD, Person>();
+
+	public Person(String s){
+		navn = s;
+	}
+	public String toString(){
+		return navn;
+	}
+	public void add(Person p, String s){
+		if(arkiv.containsKey(s));
+		else arkiv.put(s, new DVD(p, s));
+	}
+	public void laan(DVD d, Person p){
+		laante.put(d, p);
+	}
+	public void laanut(String d, Person p){
+		if(arkiv.containsKey(d) && !utlaante.containsKey(finn(d)) ){
+			utlaante.put(finn(d), p);
+			arkiv.get(d).bort(p);
+		}
+		else ;
+	}
+	public void lever(String d){
+		laante.remove(d);
+	}
+	public void tilbake(String d){
+		utlaante.get(finn(d)).lever(d);
+		finn(d).hjem();
+		utlaante.remove(d);
+	}
+	public DVD finn(String tittel){
+		if(arkiv.containsKey(tittel)) return arkiv.get(tittel);
+		else if(laante.containsKey(tittel)){
+			for(DVD d : laante.keySet())if(d.tittel().equals(tittel))return d;	
+		}
+		return null;
+	}
+	public Boolean inne(String s){
+		if(utlaante.containsKey(s) || !arkiv.containsKey(s))return false;
+		else return true;
+	}
+	public void printdvd(){
+		arkiv.forEach((str, dvd)-> System.out.println("Tittel: "+str+"\tEier: "+dvd.eier().toString()+"\tLaant til: "+dvd.laaner().toString()));
+		laante.forEach((dvd, per)
+				-> System.out.println("Tittel: "+dvd.tittel()+"\tEier: "+per.toString()+"\tLaant til: "+dvd.laaner().toString())
+				);
+		System.out.println("");
+
+
+	}
+
+	public Boolean has(String s){
+		if(arkiv.containsKey(s))return true;
+		else return false;
+	}
+	public int[] tell(){
+		int[] x = {0,0,0};
+		arkiv.forEach((s,d)->x[0]++);
+		utlaante.forEach((s,d)->x[1]++);
+		laante.forEach((s,d)->x[2]++);
+		return x;
+	}
+	public String slutt(){
+		String x = "";
+		for(DVD dvd : arkiv.values()){
+			if(!utlaante.containsKey(dvd))
+				x = x.concat(dvd.tittel()+"\n");
+			else x = x.concat("*"+dvd.tittel()+"\n"+dvd.laaner().toString()+"\n");
+			
+		}
+		if(!x.equals(""))x = x.concat("-\n");
+		return x;
+		
+	}
+}

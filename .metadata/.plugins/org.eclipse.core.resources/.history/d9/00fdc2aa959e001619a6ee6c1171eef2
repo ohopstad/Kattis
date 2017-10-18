@@ -1,0 +1,84 @@
+import java.util.HashMap;
+import java.util.Map;
+
+class Person{
+
+// PRIVATE---
+	private String navn;
+	private Map<String, DVD>  arkiv = new HashMap<String, DVD>();
+	private Map<DVD, Person>  laante =new HashMap<DVD, Person>();
+	private Map<DVD, Person>  utlaante =new HashMap<DVD, Person>();
+
+// PUBLIC---
+	public Person(String namn){
+		navn = namn;
+	}
+	public String toString(){
+		return navn;
+	}
+	public void add(Person self, String tittel){
+		if(arkiv.containsKey(tittel));
+		else arkiv.put(tittel, new DVD(self, tittel));
+	}
+	public void laan(DVD dvd, Person fra){
+		laante.put(dvd, fra);
+	}
+	public void laanut(String tittel, Person til){
+		if(arkiv.containsKey(tittel) && !utlaante.containsKey(finn(tittel)) ){
+			utlaante.put(finn(tittel), til);
+			arkiv.get(tittel).bort(til);
+		}
+		else ;
+	}
+	public void lever(String tittel){
+		laante.get(finn(tittel)).tilbake(tittel)
+		laante.remove(finn(tittel));
+	}
+	public void tilbake(String tittel){
+		finn(tittel).hjem();
+		utlaante.remove(tittel);
+	}
+	public DVD finn(String tittel){
+		if(arkiv.containsKey(tittel)) return arkiv.get(tittel);
+		for(DVD d : laante.keySet())if(d.tittel().equals(tittel))return d;	
+		for(DVD d : utlaante.keySet())if(d.tittel().equals(tittel))return d;
+		return null;
+	}
+	public Boolean inne(String s){
+		if(utlaante.containsKey(s) || !arkiv.containsKey(s))return false;
+		else return true;
+	}
+	public void printdvd(){
+		arkiv.forEach((str, dvd)-> System.out.println("Tittel: "+str+"\tEier: "+dvd.eier().toString()+"\tLaant til: "+dvd.laaner().toString()));
+		laante.forEach((dvd, per)
+				-> System.out.println("Tittel: "+dvd.tittel()+"\tEier: "+per.toString()+"\tLaant til: "+dvd.laaner().toString())
+				);
+		System.out.println("");
+
+
+	}
+
+	public Boolean has(String s){
+		if(arkiv.containsKey(s))return true;
+		else return false;
+	}
+	public int[] tell(){
+		int[] x = {0,0,0};
+		arkiv.forEach((s,d)->x[0]++);
+		utlaante.forEach((s,d)->x[1]++);
+		laante.forEach((s,d)->x[2]++);
+		return x;
+	}
+	public String slutt(){
+		String x = "";
+		for(DVD dvd : arkiv.values()){
+			if(!utlaante.containsKey(dvd))
+				x = x.concat(dvd.tittel()+"\n");
+			else x = x.concat("*"+dvd.tittel()+"\n"+dvd.laaner().toString()+"\n");
+			
+		}
+		x = x.concat("-\n");
+		return x;
+		
+	}
+}
